@@ -15,6 +15,7 @@ import {
   Tags,
   X,
 } from 'lucide-react';
+import Image from 'next/image';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -36,6 +37,7 @@ type Product = {
   inStock: boolean;
   popularity: number;
   newestRank: number;
+  image?: string;
 };
 
 type CartLine = {
@@ -64,6 +66,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 98,
     newestRank: 6,
+    image: '/products/atta.png',
   },
   {
     id: 'india-gate-basmati-rice-5kg',
@@ -80,6 +83,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 95,
     newestRank: 5,
+    image: '/products/rice.png',
   },
   {
     id: 'tata-salt-1kg',
@@ -95,6 +99,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 87,
     newestRank: 2,
+    image: '/products/salt.png',
   },
   {
     id: 'fortune-sunflower-oil-1l',
@@ -111,6 +116,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 93,
     newestRank: 4,
+    image: '/products/sunflower_oil.png',
   },
   {
     id: 'mdh-garam-masala-100g',
@@ -127,6 +133,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 84,
     newestRank: 7,
+    image: '/products/garam_masala.png',
   },
   {
     id: 'amul-ghee-1l',
@@ -159,6 +166,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 88,
     newestRank: 8,
+    image: '/products/chana_dal.png',
   },
   {
     id: 'moong-dal-1kg',
@@ -175,6 +183,7 @@ const products: Product[] = [
     inStock: false,
     popularity: 82,
     newestRank: 3,
+    image: '/products/moong_dal.png',
   },
   {
     id: 'sugar-5kg',
@@ -191,6 +200,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 81,
     newestRank: 9,
+    image: '/products/sugar.png',
   },
   {
     id: 'mustard-oil-1l',
@@ -207,6 +217,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 79,
     newestRank: 1,
+    image: '/products/mustard_oil.png',
   },
   {
     id: 'parle-g-biscuits-800g',
@@ -223,6 +234,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 92,
     newestRank: 11,
+    image: '/products/parle_g.png',
   },
   {
     id: 'maggi-noodles-pack-12',
@@ -239,6 +251,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 96,
     newestRank: 12,
+    image: '/products/maggi.png',
   },
   {
     id: 'amul-butter-500g',
@@ -255,6 +268,7 @@ const products: Product[] = [
     inStock: true,
     popularity: 85,
     newestRank: 14,
+    image: '/products/butter.png',
   },
   {
     id: 'surf-excel-detergent-2kg',
@@ -368,17 +382,23 @@ function ProductCard({
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.75),transparent_42%)]" />
         <div className="absolute -right-7 -top-7 h-20 w-20 rounded-full bg-white/60 blur-xl" />
-        <div className={`absolute inset-3 rounded-[24px] bg-gradient-to-br ${product.placeholderGradient}`} />
-
-        <div className="relative flex h-full items-center justify-center rounded-[24px]">
-          <div
-            className="flex h-20 w-20 items-center justify-center rounded-[26px] bg-white/90 text-4xl font-black shadow-[0_16px_34px_rgba(26,26,46,0.10)]"
-            style={{ color: product.accent }}
-          >
-            {initial}
-          </div>
-          <span className="absolute bottom-4 right-4 text-2xl drop-shadow-sm">{product.emoji}</span>
+        <div className={`absolute inset-3 rounded-[24px] bg-gradient-to-br ${product.placeholderGradient} overflow-hidden`}>
+          {product.image && (
+            <Image src={product.image} alt={product.name} fill className="object-cover" />
+          )}
         </div>
+
+        {!product.image && (
+          <div className="relative flex h-full items-center justify-center rounded-[24px]">
+            <div
+              className="flex h-20 w-20 items-center justify-center rounded-[26px] bg-white/90 text-4xl font-black shadow-[0_16px_34px_rgba(26,26,46,0.10)]"
+              style={{ color: product.accent }}
+            >
+              {initial}
+            </div>
+            <span className="absolute bottom-4 right-4 text-2xl drop-shadow-sm">{product.emoji}</span>
+          </div>
+        )}
       </div>
 
       <div className="p-3">

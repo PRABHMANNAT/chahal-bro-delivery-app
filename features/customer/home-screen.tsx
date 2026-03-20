@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import {
   Bell,
   ChevronRight,
@@ -49,6 +50,7 @@ type Product = {
   emoji: string;
   placeholderGradient: string;
   accent: string;
+  image?: string;
 };
 
 type CartLine = {
@@ -127,6 +129,7 @@ const bestsellers: Product[] = [
     emoji: '🌾',
     placeholderGradient: 'from-[#FFF1E6] via-[#FFE3CC] to-[#FAD0B1]',
     accent: '#C67C2A',
+    image: '/products/atta.png',
   },
   {
     id: 'india-gate-basmati-rice-5kg',
@@ -139,6 +142,7 @@ const bestsellers: Product[] = [
     emoji: '🍚',
     placeholderGradient: 'from-[#E8F7FF] via-[#D8F1FF] to-[#C7E8FF]',
     accent: '#2299DD',
+    image: '/products/rice.png',
   },
   {
     id: 'tata-salt-1kg',
@@ -150,6 +154,7 @@ const bestsellers: Product[] = [
     emoji: '🧂',
     placeholderGradient: 'from-[#F5F7FA] via-[#E9EDF4] to-[#DFE5EF]',
     accent: '#6B7280',
+    image: '/products/salt.png',
   },
   {
     id: 'fortune-sunflower-oil-1l',
@@ -162,6 +167,7 @@ const bestsellers: Product[] = [
     emoji: '🧈',
     placeholderGradient: 'from-[#FFF4CC] via-[#FFE59A] to-[#FFD76F]',
     accent: '#D4A017',
+    image: '/products/sunflower_oil.png',
   },
   {
     id: 'mdh-garam-masala-100g',
@@ -174,6 +180,7 @@ const bestsellers: Product[] = [
     emoji: '🌶️',
     placeholderGradient: 'from-[#FFE8E8] via-[#FFD1D1] to-[#FFB5B5]',
     accent: '#CC2222',
+    image: '/products/garam_masala.png',
   },
   {
     id: 'maggi-noodles-pack-12',
@@ -186,6 +193,7 @@ const bestsellers: Product[] = [
     emoji: '🍜',
     placeholderGradient: 'from-[#FFF6D8] via-[#FFEFB3] to-[#FFE37A]',
     accent: '#E39A00',
+    image: '/products/maggi.png',
   },
   {
     id: 'amul-butter-500g',
@@ -198,6 +206,7 @@ const bestsellers: Product[] = [
     emoji: '🥛',
     placeholderGradient: 'from-[#FFF1B8] via-[#FFE98D] to-[#FFD85B]',
     accent: '#D18A00',
+    image: '/products/butter.png',
   },
   {
     id: 'parle-g-biscuits-800g',
@@ -210,6 +219,7 @@ const bestsellers: Product[] = [
     emoji: '🍪',
     placeholderGradient: 'from-[#FDE7D8] via-[#FAD0B0] to-[#F6B78D]',
     accent: '#C76B2A',
+    image: '/products/parle_g.png',
   },
 ];
 
@@ -225,6 +235,7 @@ const dailyEssentials: Product[] = [
     emoji: '🫘',
     placeholderGradient: 'from-[#FFF3CF] via-[#FFE59A] to-[#FFD96D]',
     accent: '#D4A017',
+    image: '/products/chana_dal.png',
   },
   {
     id: 'moong-dal-1kg',
@@ -237,6 +248,7 @@ const dailyEssentials: Product[] = [
     emoji: '🫘',
     placeholderGradient: 'from-[#EDF9D7] via-[#DDF4B1] to-[#CBE98C]',
     accent: '#6E9E2B',
+    image: '/products/moong_dal.png',
   },
   {
     id: 'sugar-5kg',
@@ -249,6 +261,7 @@ const dailyEssentials: Product[] = [
     emoji: '🍬',
     placeholderGradient: 'from-[#F6F8FC] via-[#E9EDF5] to-[#D9E2EF]',
     accent: '#94A3B8',
+    image: '/products/sugar.png',
   },
   {
     id: 'mustard-oil-1l',
@@ -261,6 +274,7 @@ const dailyEssentials: Product[] = [
     emoji: '🧈',
     placeholderGradient: 'from-[#FFF2C4] via-[#FFE38A] to-[#FFD04C]',
     accent: '#D69200',
+    image: '/products/mustard_oil.png',
   },
 ];
 
@@ -324,17 +338,23 @@ function ProductCard({
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.75),transparent_42%)]" />
         <div className="absolute -right-7 -top-7 h-20 w-20 rounded-full bg-white/60 blur-xl" />
-        <div className={`absolute inset-3 rounded-[24px] bg-gradient-to-br ${product.placeholderGradient}`} />
-
-        <div className="relative flex h-full items-center justify-center rounded-[24px]">
-          <div
-            className="flex h-20 w-20 items-center justify-center rounded-[26px] bg-white/90 text-4xl font-black shadow-[0_16px_34px_rgba(26,26,46,0.10)]"
-            style={{ color: product.accent }}
-          >
-            {initial}
-          </div>
-          <span className="absolute bottom-4 right-4 text-2xl drop-shadow-sm">{product.emoji}</span>
+        <div className={`absolute inset-3 rounded-[24px] bg-gradient-to-br ${product.placeholderGradient} overflow-hidden`}>
+          {product.image && (
+            <Image src={product.image} alt={product.name} fill className="object-cover" />
+          )}
         </div>
+
+        {!product.image && (
+          <div className="relative flex h-full items-center justify-center rounded-[24px]">
+            <div
+              className="flex h-20 w-20 items-center justify-center rounded-[26px] bg-white/90 text-4xl font-black shadow-[0_16px_34px_rgba(26,26,46,0.10)]"
+              style={{ color: product.accent }}
+            >
+              {initial}
+            </div>
+            <span className="absolute bottom-4 right-4 text-2xl drop-shadow-sm">{product.emoji}</span>
+          </div>
+        )}
       </div>
 
       <div className="p-3">

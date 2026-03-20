@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { useParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { ArrowLeft, Check, ChevronDown, Clock3, Minus, Plus, Share2, Truck } from 'lucide-react';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -25,6 +26,7 @@ type GalleryImage = {
   accent: string;
   gradient: string;
   emoji: string;
+  image?: string;
 };
 
 type SimilarProduct = {
@@ -37,6 +39,7 @@ type SimilarProduct = {
   accent: string;
   gradient: string;
   emoji: string;
+  image?: string;
 };
 
 type Product = {
@@ -67,6 +70,7 @@ const defaultProduct: Product = {
       accent: '#C67C2A',
       gradient: 'from-[#FFF2E2] via-[#FFE1BE] to-[#FFD099]',
       emoji: '\u{1F33E}',
+      image: '/products/atta.png',
     },
     {
       id: 'kitchen-bowl',
@@ -97,6 +101,7 @@ const defaultProduct: Product = {
       accent: '#2299DD',
       gradient: 'from-[#E8F7FF] via-[#D8F0FF] to-[#C6E7FF]',
       emoji: '\u{1F35A}',
+      image: '/products/rice.png',
     },
     {
       id: 'fortune-sunflower-oil',
@@ -108,6 +113,7 @@ const defaultProduct: Product = {
       accent: '#D4A017',
       gradient: 'from-[#FFF5D6] via-[#FFE7A3] to-[#FFD66E]',
       emoji: '\u{1F9C8}',
+      image: '/products/sunflower_oil.png',
     },
     {
       id: 'tata-salt',
@@ -118,6 +124,7 @@ const defaultProduct: Product = {
       accent: '#6B7280',
       gradient: 'from-[#F7F9FC] via-[#E8EDF5] to-[#DBE3EF]',
       emoji: '\u{1F9C2}',
+      image: '/products/salt.png',
     },
     {
       id: 'chana-dal',
@@ -129,6 +136,7 @@ const defaultProduct: Product = {
       accent: '#C99822',
       gradient: 'from-[#FFF3D5] via-[#FFE6A8] to-[#FFD877]',
       emoji: '\u{1FAD8}',
+      image: '/products/chana_dal.png',
     },
     {
       id: 'mdh-garam-masala',
@@ -140,6 +148,7 @@ const defaultProduct: Product = {
       accent: '#CC2222',
       gradient: 'from-[#FFE8E8] via-[#FFD3D3] to-[#FFBBBB]',
       emoji: '\u{1F336}\uFE0F',
+      image: '/products/garam_masala.png',
     },
     {
       id: 'amul-butter',
@@ -151,6 +160,7 @@ const defaultProduct: Product = {
       accent: '#D18A00',
       gradient: 'from-[#FFF3C7] via-[#FFE599] to-[#FFD76A]',
       emoji: '\u{1F9C8}',
+      image: '/products/butter.png',
     },
   ],
 };
@@ -186,16 +196,22 @@ function SimilarProductCard({
           </span>
         ) : null}
 
-        <div className={`absolute inset-3 rounded-[20px] bg-gradient-to-br ${item.gradient}`} />
-        <div className="relative flex h-full items-center justify-center rounded-[20px]">
-          <div
-            className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-white/[0.9] text-[30px] font-black shadow-[0_12px_28px_rgba(26,26,46,0.10)]"
-            style={{ color: item.accent }}
-          >
-            {initial}
-          </div>
-          <span className="absolute bottom-3 right-3 text-xl">{item.emoji}</span>
+        <div className={`absolute inset-3 rounded-[20px] bg-gradient-to-br ${item.gradient} overflow-hidden`}>
+          {item.image && (
+            <Image src={item.image} alt={item.name} fill className="object-cover" />
+          )}
         </div>
+        {!item.image && (
+          <div className="relative flex h-full items-center justify-center rounded-[20px]">
+            <div
+              className="flex h-16 w-16 items-center justify-center rounded-[20px] bg-white/[0.9] text-[30px] font-black shadow-[0_12px_28px_rgba(26,26,46,0.10)]"
+              style={{ color: item.accent }}
+            >
+              {initial}
+            </div>
+            <span className="absolute bottom-3 right-3 text-xl">{item.emoji}</span>
+          </div>
+        )}
       </div>
 
       <div className="p-3">
@@ -379,15 +395,21 @@ export default function ProductDetailPage() {
                   initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.92 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: shouldReduceMotion ? 0.18 : 0.34, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative flex h-48 w-48 items-center justify-center rounded-full bg-white/[0.9] shadow-[0_24px_52px_rgba(26,26,46,0.14)]"
+                  className="relative flex h-48 w-48 items-center justify-center rounded-full bg-white/[0.9] shadow-[0_24px_52px_rgba(26,26,46,0.14)] overflow-hidden"
                 >
-                  <div
-                    className="flex h-28 w-28 items-center justify-center rounded-full text-[64px] font-black shadow-[0_16px_36px_rgba(26,26,46,0.10)]"
-                    style={{ backgroundColor: selectedImage.accent, color: '#FFFFFF' }}
-                  >
-                    {product.name.charAt(0).toUpperCase()}
-                  </div>
-                  <span className="absolute bottom-6 right-6 text-[34px]">{selectedImage.emoji}</span>
+                  {selectedImage.image ? (
+                    <Image src={selectedImage.image} alt={product.name} fill className="object-cover" />
+                  ) : (
+                    <>
+                      <div
+                        className="flex h-28 w-28 items-center justify-center rounded-full text-[64px] font-black shadow-[0_16px_36px_rgba(26,26,46,0.10)]"
+                        style={{ backgroundColor: selectedImage.accent, color: '#FFFFFF' }}
+                      >
+                        {product.name.charAt(0).toUpperCase()}
+                      </div>
+                      <span className="absolute bottom-6 right-6 text-[34px]">{selectedImage.emoji}</span>
+                    </>
+                  )}
                 </motion.div>
               </div>
             </div>
