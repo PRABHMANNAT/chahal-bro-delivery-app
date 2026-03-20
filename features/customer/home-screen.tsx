@@ -72,16 +72,16 @@ const categoryChips: CategoryChip[] = [
 ];
 
 const shopCategories = [
-  { id: 'atta-grid', emoji: '🌾', label: 'Atta' },
-  { id: 'rice-grid', emoji: '🍚', label: 'Rice' },
-  { id: 'dal-grid', emoji: '🫘', label: 'Dal' },
-  { id: 'oil-grid', emoji: '🧈', label: 'Oil' },
-  { id: 'spices-grid', emoji: '🌶️', label: 'Spices' },
-  { id: 'sugar-grid', emoji: '🍬', label: 'Sugar' },
-  { id: 'snacks-grid', emoji: '🍪', label: 'Snacks' },
-  { id: 'drinks-grid', emoji: '🥤', label: 'Drinks' },
-  { id: 'dairy-grid', emoji: '🥛', label: 'Dairy' },
-  { id: 'household-grid', emoji: '🧹', label: 'Household' },
+  { id: 'atta-grid', emoji: '🌾', label: 'Atta', image: '/categories/atta.png', gradient: 'from-[#FFF1E6] to-[#FAD0B1]', accent: '#C67C2A' },
+  { id: 'rice-grid', emoji: '🍚', label: 'Rice', image: '/categories/rice.png', gradient: 'from-[#E8F7FF] to-[#C7E8FF]', accent: '#2299DD' },
+  { id: 'dal-grid', emoji: '🫘', label: 'Dal', image: '/categories/dal.png', gradient: 'from-[#FFF3CF] to-[#FFD96D]', accent: '#D4A017' },
+  { id: 'oil-grid', emoji: '🧈', label: 'Oil', image: '/categories/oil.png', gradient: 'from-[#FFF4CC] to-[#FFD76F]', accent: '#D4A017' },
+  { id: 'spices-grid', emoji: '🌶️', label: 'Spices', image: '/categories/spices.png', gradient: 'from-[#FFE8E8] to-[#FFB5B5]', accent: '#CC2222' },
+  { id: 'sugar-grid', emoji: '🍬', label: 'Sugar', gradient: 'from-[#F3E8FF] to-[#DDD6FE]', accent: '#7C3AED' },
+  { id: 'snacks-grid', emoji: '🍪', label: 'Snacks', gradient: 'from-[#FDE7D8] to-[#F6B78D]', accent: '#C76B2A' },
+  { id: 'drinks-grid', emoji: '🥤', label: 'Drinks', gradient: 'from-[#E0F7FA] to-[#B2EBF2]', accent: '#00897B' },
+  { id: 'dairy-grid', emoji: '🥛', label: 'Dairy', gradient: 'from-[#FFF9C4] to-[#FFF176]', accent: '#F9A825' },
+  { id: 'household-grid', emoji: '🧹', label: 'Household', gradient: 'from-[#E8F5E9] to-[#C8E6C9]', accent: '#388E3C' },
 ];
 
 const banners: Banner[] = [
@@ -860,14 +860,33 @@ export default function CustomerHomePage({
 
                 <div className="no-scrollbar grid grid-flow-col auto-cols-[88px] grid-rows-2 gap-3 overflow-x-auto pb-1 sm:grid-cols-5 sm:grid-flow-row sm:auto-cols-auto sm:overflow-visible">
                   {shopCategories.map((category) => (
-                    <button
+                    <motion.button
                       key={category.id}
                       type="button"
-                      className="flex h-[96px] w-[88px] snap-start flex-col items-center justify-center rounded-2xl border border-gray-100 bg-white px-2 text-center shadow-[0_12px_28px_rgba(26,26,46,0.05)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_34px_rgba(26,26,46,0.07)] sm:h-[104px] sm:w-auto"
+                      whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.04 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.97 }}
+                      transition={{ duration: 0.18, ease: 'easeOut' }}
+                      className="snap-start overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_12px_28px_rgba(26,26,46,0.06)] sm:w-auto"
+                      style={{ width: 88, minWidth: 88 }}
                     >
-                      <span className="text-[2.2rem]">{category.emoji}</span>
-                      <span className="mt-2 text-[12px] font-semibold leading-4 text-[#1A1A2E]">{category.label}</span>
-                    </button>
+                      <div
+                        className={`relative flex h-[58px] w-full items-center justify-center bg-gradient-to-br ${category.gradient} overflow-hidden`}
+                      >
+                        {(category as { image?: string }).image ? (
+                          <Image
+                            src={(category as { image?: string }).image!}
+                            alt={category.label}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <span className="text-[2rem] drop-shadow-sm">{category.emoji}</span>
+                        )}
+                      </div>
+                      <div className="px-1.5 py-2">
+                        <span className="block text-center text-[11px] font-bold leading-tight text-[#1A1A2E]">{category.label}</span>
+                      </div>
+                    </motion.button>
                   ))}
                 </div>
               </motion.section>
